@@ -66,6 +66,54 @@ class Tree
     node.data > value ? find(value, node.left_child) : find(value, node.right_child)
   end
 
+  def level_order(node = @root)
+    return nil if node.nil?
+
+
+    queue_arr = []
+    values_arr = []
+    queue_arr.push(node)
+    if block_given?
+      until queue_arr.empty?
+        current = queue_arr.first
+        yield current
+        queue_arr.push(current.left_child) unless current.left_child.nil?
+        queue_arr.push(current.right_child) unless current.right_child.nil?
+        queue_arr.shift
+      end
+    else
+      values_arr = []
+      until queue_arr.empty?
+        current = queue_arr.first
+        values_arr << current.data
+        queue_arr.push(current.left_child) unless current.left_child.nil?
+        queue_arr.push(current.right_child) unless current.right_child.nil?
+        queue_arr.shift
+      end
+      values_arr
+    end
+  end
+
+  # def level_order(node = @root)
+  #   return nil if node.nil?
+
+  #   queue_arr = [node]
+  #   values_arr = []
+  #   # queue_arr.push(node)
+  #   until queue_arr.empty?
+  #     current = queue_arr.first
+  #     if block_given?
+  #       yield current
+  #     else
+  #       values_arr.push(current.data)
+  #     end
+  #     queue_arr.push(current.left_child) unless current.left_child.nil?
+  #     queue_arr.push(current.right_child) unless current.right_child.nil?
+  #     queue_arr.shift
+  #   end
+  #   return values_arr if block_given?
+  # end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
