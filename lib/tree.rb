@@ -133,6 +133,28 @@ class Tree
     return values_arr unless block_given?
   end
 
+  def height(node = @root)
+    return -1 if node.nil?
+
+    left_height = height(node.left_child)
+    right_height = height(node.right_child)
+
+    left_height > right_height ? left_height + 1 : right_height + 1
+  end
+
+  def balanced?(node = @root)
+    return -1 if node.nil?
+
+    left_height = height(node.left_child)
+    right_height = height(node.right_child)
+
+    (left_height - right_height).abs <= 1
+  end
+
+  def rebalance
+    @root = build_tree(self.inorder.uniq.sort)
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
