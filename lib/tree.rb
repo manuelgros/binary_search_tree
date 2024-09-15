@@ -83,6 +83,36 @@ class Tree
     end
   end
 
+  def preorder(node = @root, arr = [], &block)
+    return nil if node.nil?
+
+    if block_given?
+      block.call node
+      inorder(node.left_child, values_arr, &block)
+      inorder(node.right_child, values_arr, &block)
+    else
+      values_arr = arr
+      values_arr << node.data
+      inorder(node.left_child, values_arr, &block)
+      inorder(node.right_child, values_arr, &block)
+      values_arr
+    end
+  end
+
+  def postorder(node = @root, arr = [], &block)
+    return nil if node.nil?
+
+    if block_given?
+      inorder(node.left_child, values_arr, &block)
+      inorder(node.right_child, values_arr, &block)
+      block.call node
+    else
+      values_arr = arr
+      inorder(node.left_child, values_arr, &block)
+      inorder(node.right_child, values_arr, &block)
+      values_arr << node.data
+    end
+  end
 
   def level_order(node = @root)
     return nil if node.nil?
